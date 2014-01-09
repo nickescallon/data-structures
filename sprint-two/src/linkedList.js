@@ -2,39 +2,38 @@ var makeLinkedList = function(){
   var list = {};
   list.head = null;
   list.tail = null;
-  var count = 0
-  var lowestCount = 0;
-  
+
+
   list.addToTail = function(value){
     var results = makeNode(value);
     if (!this.head){
       this.head = results;
     } else {
       this.tail.next = results;
-      this[count] = this.tail;
-      count++;
     }
-
     this.tail = results;
   };
 
   list.removeHead = function(){
     if (this.head) {
-      var temp = this.head.next;
-      console.log(this.head);
-      delete this[lowestCount];
-      lowestCount++;
-      this.head = temp;
+      this.head = this.head.next;
     }
   };
 
   list.contains = function(target, node){
-    for (var key in this) {
-      if (this[key].value === target) {
-        return true;
-      }
-    }
-    return false;
+    var result = false;
+    node = node || this.head;
+
+    var checkNodes = function(target, node){
+        if (node.value === target){
+          result = true;
+        }else if (node.next) {
+          checkNodes(target, node.next);
+        }
+    };
+    
+    checkNodes(target, node);
+    return result;
   };
 
   return list;
