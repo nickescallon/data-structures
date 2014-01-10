@@ -14,11 +14,28 @@ var makeLinkedList = function(){
     this.tail = results;
   };
 
+  list.addToHead = function(value) {
+    var results = makeNode(value);
+    if (!this.tail){
+      this.tail = results;
+    } else {
+      this.head.previous = results;
+      results.next = this.head;
+    }
+    this.head = results;
+  }
+
   list.removeHead = function(){
     if (this.head) {
       this.head = this.head.next;
     }
   };
+
+  list.removeTail = function(){
+    if (this.tail){
+      this.tail = this.tail.previous;
+    }
+  }
 
   list.contains = function(target, node){
     var result = false;
@@ -43,6 +60,7 @@ var makeNode = function(value){
   var node = {};
   node.value = value;
   node.next = null;
+  node.previous = null;
 
   return node;
 };
