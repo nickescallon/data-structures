@@ -44,4 +44,14 @@ describe("tree", function() {
     assert.isTrue(tree.contains(8));
   });
 
+  it("should have a property parent", function () {
+    expect(tree).to.have.property('parent');
+  })
+
+  it("should have a method named removeFromParent", function () {
+    expect(tree.removeFromParent).to.be.a('function');
+  })
+
+
+
 });
