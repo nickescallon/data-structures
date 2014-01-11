@@ -15,18 +15,21 @@ HashTable.prototype.insert = function(k, v){
   this._storage.get(i).push(pair);
   this._items++;
 
-  var that = this;
-
   if (this._items / this._limit >= .75) {
-    this._limit *= 2;
-    debugger;
-    this._storage.each(function(value, index, collection){
-      if (value){
-        for (var i=0; i<value.length; i++){
-          that._storage.insert(value[i][0], value[i][1]);
+    var holder = [];
+    this._storage.each(function(bucket, index, collection){
+      if (bucket){
+        for (var i=0; i<bucket.length; i++){
+          holder.push(bucket[i]);
         }
       }
     });
+    this._limit *= 2;
+    this._items = 0;
+    this._storage = makeLimitedArray(this._limit);
+    for (var i = 0; i < holder.length; i++) {
+      this.insert(holder[i][0], holder[i][1]);
+    }
   }
 };
 
@@ -38,7 +41,7 @@ HashTable.prototype.retrieve = function(k){
       return bucket[i][1];
     }
   }
-  console.log(this._storage.get(i))
+
   return null;
 };
 
@@ -48,6 +51,24 @@ HashTable.prototype.remove = function(k){
   for (var i=0; i<bucket.length; i++){
     if (bucket[i][0] === k){
       bucket.splice(i,1);
+      this._items--;
+    }
+  }
+
+  if (this._items / this._limit === 3/16){
+    var holder = [];
+    this._storage.each(function(bucket, index, collection){
+      if (bucket){
+        for (var i=0; i<bucket.length; i++){
+          holder.push(bucket[i]);
+        }
+      }
+    });
+    this._limit /= 2;
+    this._items = 0;
+    this._storage = makeLimitedArray(this._limit);
+    for(var i=0; i<holder.length; i++){
+      this.insert(holder[i][0], holder[i][1]);
     }
   }
 };
