@@ -6,6 +6,7 @@ var makeTree = function(value){
   newTree.addChild = treeMethods.addChild;
   newTree.contains = treeMethods.contains;
   newTree.removeFromParent = treeMethods.removeFromParent;
+  newTree.traverse = treeMethods.traverse;
 
   return newTree;
 };
@@ -44,5 +45,13 @@ treeMethods.removeFromParent = function () {
   }
   this.parent = null;
 
-}
+};
 
+treeMethods.traverse = function(callback){
+  callback(this.value);
+  if(this.children) {
+    for (var i= 0; i <this.children.length; i++) {
+      this.children[i].traverse(callback);
+    }
+  }
+};
