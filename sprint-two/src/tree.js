@@ -16,9 +16,7 @@ var treeMethods = {};
 treeMethods.addChild = function(value){
   this.children = this.children || [];
   var child = makeTree(value);
-  if (child.parent === null){
-    child.parent = this;
-  }
+  child.parent = this;
   this.children.push(child);
 };
 
@@ -39,15 +37,12 @@ treeMethods.contains = function(target){
   return result;
 };
 
-treeMethods.removeFromParent = function(){
-  if (this.parent){
-    for (var i=0; i<this.parent.children.length; i++){
-      if (this.parent.children[i] === this){
-        this.parent.children.splice(i, 1);
-        this.parent = null;
-        break;
-      }
-    }
+treeMethods.removeFromParent = function () {
+  if(this.parent) {
+    var index = this.parent.children.indexOf(this);
+    this.parent.children.splice(index, 1);
   }
-};
+  this.parent = null;
+
+}
 
